@@ -4,11 +4,33 @@ security:
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
+        db_provider:
+            entity:
+                class: AppBundle:User
         in_memory:
             memory: ~
 
+    encoders:
+        AppBundle\Entity\User:
+            algorithm: bcrypt
+
+    access_control:
+        - { path: ^/chat, roles: ROLE_USER}
+
+
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_USER]
+
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
+        main:
+            anonymous: ~
+            logout:
+                path: /logout
+                target: /
+            form_login:
+                login_path: signin
+                check_path: signin
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false

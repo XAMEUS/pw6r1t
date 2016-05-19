@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}La vie incroyable des boucs{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+
+<div class="container top-buffer">
+
+    <div>
+    {% for message in messages %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="author"> {{ message.author }} </h4>
+                <span class="date">({{ message.insertDate|date('d-m-Y') }})</span>
+            </div>
+            <div class="panel-body">
+                <div class="message">{{ message.message }}</div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+
+</div> <!-- /container -->
+{% endblock %}

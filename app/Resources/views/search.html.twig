@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche{% endblock %}
+{% block stylesheets %}
+{% endblock %}
+{% block body %}
+
+<div class="container top-buffer">
+
+  <form>
+      <label for="search" class="sr-only">Recherche</label>
+      <input type="text" id="search" name="search" class="form-control" placeholder="Chercher un ami parce que je me sens seul..." required autofocus>
+  </form>
+
+  <table class="table table-striped table-hover">
+  <thead>
+      <tr>
+          <th>Lastname</th>
+          <th>Firstname</th>
+          <th>Mail</th>
+          <th>Username</th>
+      </tr>
+  </thead>
+  <tbody id="tbody" data-href={{path('user')}}>
+  </tbody>
+  </table>
+
+</div> <!-- /container -->
+{% endblock %}
+
+{% block javascripts %}
+
+<script src="http://code.jquery.com/jquery-1.11.3.js"></script>
+<script src="{{ asset('js/search.js') }}"></script>
+
+<script>
+$(document).ready(function(){
+    $("#search").on("change paste keyup", function() {
+        print_users($(this).val())
+    });
+});
+
+function print_users(p)
+{
+    $.ajax({
+        //url: "",
+        url: "{{ path('userslist') }}",
+        type: 'POST',
+        data: {search: p},
+        dataType: 'json',
+        success: function(r) {
+            $("#tbody").empty();
+            $.each(JSON.parse(r['data']), function(index, element) {
+                var newTR = document.createElement('tr');
+                var attribut = document.createAttribute("class");
+                attribut.value = "clickable-row";
+                newTR.setAttributeNode(attribut);
+                attribut = document.createAttribute("data-href");
+                attribut.value = "clickable-row";
+                attribut.value= "/user/"+element.id;
+                newTR.setAttributeNode(attribut);
+                newTR.innerHTML = "<td>"+element.lastname+'</td><td>'+element.firstname+'</td><td>'+element.email+'</td><td>'+element.username+'</td>';
+                newTR.onclick = function() {
+                    window.document.location = $("#tbody").data("href")+"/"+element.id;
+                }
+                $("#tbody").append(newTR);
+
+            });
+        }
+    });
+}
+
+</script>
+
+{% endblock %}

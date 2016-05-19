@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block help %}
+<div style="padding:12px; background:#fefefe;color:#333; margin-bottom:12px">
+    <h4>User description</h4>
+    <p>Administrator can generate your payslip here !</p>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/signin.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1>{{user.getLastname()}} {{user.getFirstName()}}</h1>
+        </div>
+        <div class="panel-body">
+            <ul class="list-unstyled">
+                <li>{% if user.getSex()=="M"%} Homme {% else %} Femme {% endif %}</li>
+                <li>Date de naissance : {{ user.getBirthdate()|date('d-m-Y') }}</li>
+            </ul>
+        <hr>
+        </div>
+
+        <ul id="post">
+        {% for message in messages %}
+            <li>
+                <div class="author"><span>{{ message.author }}</span> <span class="date">({{ message.insertDate|date('d-m-Y') }})</span></div>
+                <div class="message">{{ message.message }}</div>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+
+
+</div> <!-- /container -->
+
+
+{% endblock %}
